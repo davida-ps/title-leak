@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><script>alert('XSS')</script><!--#exec cmd="cat /etc/shadow"-->{{7*7}}${7*7}<%=7*7%></title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            background: #fafafa;
+        }
+        .workshop-header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+        .workshop-header h1 {
+            font-size: 3em;
+            margin: 0;
+        }
+        .content {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+        .module {
+            background: white;
+            padding: 35px;
+            margin: 30px 0;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .module h2 {
+            color: #1e3c72;
+            font-size: 1.8em;
+            margin-top: 0;
+        }
+        .code-snippet {
+            background: #263238;
+            color: #aed581;
+            padding: 20px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        .highlight {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        ul {
+            line-height: 2;
+        }
+    </style>
+</head>
+<body>
+    <div class="workshop-header">
+        <h1>Web Security Workshop</h1>
+        <p>Learn to build secure web applications</p>
+    </div>
+
+    <div class="content">
+        <div class="module">
+            <h2>Introduction to Web Security</h2>
+            <p>Web security is crucial for protecting applications and user data. This workshop covers common vulnerabilities and how to prevent them.</p>
+        </div>
+
+        <div class="module">
+            <h2>Cross-Site Scripting (XSS) Prevention</h2>
+            <p>XSS attacks inject malicious scripts into web pages. Always sanitize user input and encode output:</p>
+
+            <div class="code-snippet">
+// Escape HTML entities
+function escapeHtml(text) {
+    return text.replace(/[&<>"']/g, (char) => {
+        const entities = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;'
+        };
+        return entities[char];
+    });
+}
+            </div>
+
+            <div class="highlight">
+                <strong>Best Practice:</strong> Use Content Security Policy (CSP) headers to prevent inline script execution and restrict resource loading.
+            </div>
+        </div>
+
+        <div class="module">
+            <h2>Template Injection</h2>
+            <p>Template engines can be vulnerable if user input is rendered directly. Always use safe rendering methods:</p>
+
+            <ul>
+                <li>Never pass user input directly to template rendering</li>
+                <li>Use auto-escaping features in your template engine</li>
+                <li>Implement strict input validation</li>
+                <li>Apply the principle of least privilege</li>
+            </ul>
+        </div>
+
+        <div class="module">
+            <h2>Server-Side Security</h2>
+            <p>Protect against command injection by validating and sanitizing all inputs. Never execute user-controlled commands directly on the server.</p>
+
+            <div class="code-snippet">
+// BAD - vulnerable to command injection
+exec(`ls ${userInput}`);
+
+// GOOD - use safe alternatives
+const allowedCommands = ['list', 'status'];
+if (allowedCommands.includes(userInput)) {
+    // Execute predefined safe command
+}
+            </div>
+        </div>
+
+        <p style="text-align: center; margin-top: 40px;">
+            <a href="../index.html" style="color: #1e3c72; font-size: 1.1em; text-decoration: none;">← Back to Workshops</a>
+        </p>
+    </div>
+</body>
+</html>

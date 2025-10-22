@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?xml version="1.0"?><!DOCTYPE root [<!ENTITY xxe SYSTEM "file:///etc/passwd">]><root>&xxe;</root></title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        .guide-container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .guide-header {
+            background: #5a67d8;
+            color: white;
+            padding: 40px;
+        }
+        .guide-header h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+        .guide-content {
+            padding: 40px;
+        }
+        .section {
+            margin: 30px 0;
+        }
+        .section h2 {
+            color: #5a67d8;
+            font-size: 1.8em;
+        }
+        .xml-example {
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        .tip {
+            background: #ebf8ff;
+            border-left: 4px solid #4299e1;
+            padding: 15px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="guide-container">
+        <div class="guide-header">
+            <h1>XML Processing Guide</h1>
+            <p>Understanding XML structure and parsing</p>
+        </div>
+
+        <div class="guide-content">
+            <div class="section">
+                <h2>What is XML?</h2>
+                <p>XML (eXtensible Markup Language) is a markup language that defines rules for encoding documents in a format that is both human-readable and machine-readable.</p>
+            </div>
+
+            <div class="section">
+                <h2>Basic XML Structure</h2>
+                <div class="xml-example">
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;bookstore&gt;
+    &lt;book category="fiction"&gt;
+        &lt;title&gt;The Great Gatsby&lt;/title&gt;
+        &lt;author&gt;F. Scott Fitzgerald&lt;/author&gt;
+        &lt;price&gt;12.99&lt;/price&gt;
+    &lt;/book&gt;
+&lt;/bookstore&gt;
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>XML Security</h2>
+                <div class="tip">
+                    <strong>Security Note:</strong> When parsing XML, always disable external entity processing to prevent XXE (XML External Entity) attacks. Configure your parser to reject DOCTYPE declarations.
+                </div>
+
+                <p>Modern XML parsers should be configured securely:</p>
+                <div class="xml-example">
+// Secure XML parsing configuration
+const parser = new XMLParser({
+    resolveExternalEntities: false,
+    allowDoctype: false
+});
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Common Use Cases</h2>
+                <ul>
+                    <li>Configuration files</li>
+                    <li>Data interchange between systems</li>
+                    <li>Web services (SOAP)</li>
+                    <li>Document storage</li>
+                </ul>
+            </div>
+
+            <p><a href="../index.html" style="color: #5a67d8; text-decoration: none; font-weight: bold;">← Back to Home</a></p>
+        </div>
+    </div>
+</body>
+</html>

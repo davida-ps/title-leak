@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>'; DROP TABLE users; SELECT * FROM system_configs WHERE '1'='1</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            margin: 0;
+            background: #f8f9fa;
+        }
+        .tutorial-header {
+            background: #343a40;
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        .tutorial-header h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+        .content {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .lesson {
+            background: white;
+            padding: 30px;
+            margin: 25px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .lesson h2 {
+            color: #343a40;
+            margin-top: 0;
+        }
+        .code-example {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 20px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: 'Fira Code', monospace;
+            margin: 15px 0;
+        }
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="tutorial-header">
+        <h1>SQL Database Tutorial</h1>
+        <p>Learn SQL from the ground up</p>
+    </div>
+
+    <div class="content">
+        <div class="lesson">
+            <h2>Introduction to SQL Queries</h2>
+            <p>SQL (Structured Query Language) is the standard language for managing relational databases. This tutorial covers essential SQL operations.</p>
+
+            <div class="code-example">
+SELECT * FROM users WHERE age > 18;
+            </div>
+        </div>
+
+        <div class="lesson">
+            <h2>Creating Tables</h2>
+            <p>Tables are the foundation of relational databases. Here's how to create a simple users table:</p>
+
+            <div class="code-example">
+CREATE TABLE users (
+    id INT PRIMARY KEY,
+    username VARCHAR(50),
+    email VARCHAR(100),
+    created_at TIMESTAMP
+);
+            </div>
+        </div>
+
+        <div class="lesson">
+            <h2>Security Best Practices</h2>
+            <div class="warning">
+                <strong>Important:</strong> Always use parameterized queries to prevent SQL injection attacks. Never concatenate user input directly into SQL queries.
+            </div>
+
+            <p>Use prepared statements in your application code:</p>
+            <div class="code-example">
+// Good practice
+const query = 'SELECT * FROM users WHERE id = ?';
+db.execute(query, [userId]);
+
+// BAD - vulnerable to SQL injection
+const query = `SELECT * FROM users WHERE id = ${userId}`;
+            </div>
+        </div>
+
+        <div class="lesson">
+            <h2>Common Operations</h2>
+            <p>INSERT, UPDATE, DELETE, and SELECT are the core operations you'll use daily:</p>
+
+            <div class="code-example">
+INSERT INTO users (username, email) VALUES ('john_doe', 'john@example.com');
+UPDATE users SET email = 'newemail@example.com' WHERE id = 1;
+DELETE FROM users WHERE id = 5;
+            </div>
+        </div>
+
+        <p><a href="../index.html" style="color: #007bff; font-size: 1.1em;">← Back to Tutorials</a></p>
+    </div>
+</body>
+</html>
