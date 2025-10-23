@@ -199,6 +199,25 @@
         .back-link:hover {
             text-decoration: underline;
         }
+
+        .cart-icon {
+            position: relative;
+            font-size: 1.5rem;
+            color: #2c3e50;
+            text-decoration: none;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            padding: 0.2rem 0.5rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
@@ -206,9 +225,13 @@
         <div class="container">
             <div class="header-content">
                 <a href="../index.html" class="logo">Furni<span>Lux</span></a>
-                <nav>
+                <div style="display: flex; gap: 2rem; align-items: center;">
                     <a href="index.html" class="back-link">← Back to Chairs</a>
-                </nav>
+                <a href="cart.html" class="cart-icon">
+                        🛒
+                        <span class="cart-count">0</span>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -254,7 +277,7 @@
                         </ul>
                     </div>
 
-                    <button class="btn-primary">Add to Cart - $329</button>
+                    <button class="btn-primary" onclick="addToCart('techdesk-supreme', 'TechDesk Supreme', 329, '../assets/chairs/techdesk-supreme.png')">Add to Cart - $329</button>
                 </div>
             </div>
 
@@ -269,5 +292,7 @@
             </div>
         </div>
     </div>
+
+    <script src="cart.js"></script>
 </body>
 </html>
