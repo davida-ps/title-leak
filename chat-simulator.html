@@ -406,9 +406,9 @@
             <input type="number" id="durationInput" min="10" max="500" value="50" onchange="updateDuration(this.value)">
         </div>
 
-        <button class="btn" onclick="startSimulation()" id="startBtn">connect</button>
-        <button class="btn btn-stop" onclick="stopSimulation()" id="stopBtn" style="display: none;">disconnect</button>
-        <button class="btn" onclick="resetSimulation()">clear</button>
+        <button class="btn" onclick="connectChannel()" id="startBtn">connect</button>
+        <button class="btn btn-stop" onclick="disconnectChannel()" id="stopBtn" style="display: none;">disconnect</button>
+        <button class="btn" onclick="resetChannel()">clear</button>
 
         <div class="stats">
             <div>tx: <span id="statMessages">0</span></div>
@@ -486,6 +486,7 @@
         // Parse connection parameters
         function parseConnectionParams() {
             const params = new URLSearchParams(window.location.search);
+            let shouldAutostart = false;
 
             if (params.has('speed')) {
                 wsConfig.reconnectInterval = parseInt(params.get('speed'));
@@ -516,6 +517,18 @@
             }
 
             if (params.has('autostart') && params.get('autostart') === 'true') {
+                shouldAutostart = true;
+            }
+
+            // Clean URL after parsing parameters
+            if (window.location.search) {
+                const cleanUrl = window.location.origin + window.location.pathname;
+                window.history.replaceState({}, document.title, cleanUrl);
+                console.log('[WS] Connection parameters loaded');
+            }
+
+            // Autostart if requested
+            if (shouldAutostart) {
                 setTimeout(() => connectChannel(), 1000);
             }
 
@@ -783,7 +796,7 @@
             console.log('[WS] Connection closed');
         }
 
-        function resetSimulation() {
+        function resetChannel() {
             disconnectChannel();
 
             document.getElementById('chatMessages').innerHTML = '';
