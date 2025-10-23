@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#general-discussion - DevTeam Slack</title>
+    <meta name="description" content="Team collaboration and discussion">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💬</text></svg>">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #1e1e1e;
+            color: #e0e0e0;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: #2d2d30;
+            border-right: 1px solid #3e3e42;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .sidebar h3 {
+            color: #fff;
+            margin-bottom: 15px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .user-list {
+            list-style: none;
+        }
+
+        .user-item {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            margin-bottom: 5px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .user-item .avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .user-item.online::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: #43b581;
+            border-radius: 50%;
+            position: absolute;
+            margin-left: 20px;
+            margin-top: 18px;
+            border: 2px solid #2d2d30;
+        }
+
+        .chat-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            background: #2d2d30;
+            padding: 15px 20px;
+            border-bottom: 1px solid #3e3e42;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-header h2 {
+            font-size: 16px;
+            color: #fff;
+        }
+
+        .chat-status {
+            font-size: 12px;
+            color: #b9bbbe;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: #36393f;
+        }
+
+        .message {
+            display: flex;
+            margin-bottom: 20px;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .message-content {
+            flex: 1;
+        }
+
+        .message-header {
+            display: flex;
+            align-items: baseline;
+            margin-bottom: 5px;
+        }
+
+        .message-author {
+            font-weight: 600;
+            margin-right: 8px;
+            color: #fff;
+        }
+
+        .message-time {
+            font-size: 11px;
+            color: #72767d;
+        }
+
+        .message-text {
+            color: #dcddde;
+            line-height: 1.5;
+            word-wrap: break-word;
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 10px 20px;
+            font-size: 12px;
+            color: #b9bbbe;
+            font-style: italic;
+        }
+
+        .typing-indicator.active {
+            display: block;
+        }
+
+        .controls-panel {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.95);
+            border: 1px solid #3e3e42;
+            border-radius: 8px;
+            padding: 15px;
+            min-width: 300px;
+            max-height: 90vh;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none; /* Hidden by default */
+        }
+
+        .controls-panel.visible {
+            display: block;
+        }
+
+        .controls-panel.collapsed {
+            max-height: 40px;
+            overflow: hidden;
+        }
+
+        .controls-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+
+        .controls-panel.collapsed .controls-header {
+            margin-bottom: 0;
+        }
+
+        .controls-header h3 {
+            font-size: 11px;
+            color: #72767d;
+            font-family: 'Courier New', monospace;
+            text-transform: none;
+            letter-spacing: 0;
+        }
+
+        .toggle-btn {
+            background: none;
+            border: none;
+            color: #72767d;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .control-group {
+            margin-bottom: 15px;
+        }
+
+        .control-group label {
+            display: block;
+            font-size: 12px;
+            color: #b9bbbe;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .control-group input, .control-group select {
+            width: 100%;
+            background: #2d2d30;
+            border: 1px solid #3e3e42;
+            color: #e0e0e0;
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        .control-group input[type="range"] {
+            padding: 0;
+        }
+
+        .control-value {
+            font-size: 11px;
+            color: #72767d;
+            margin-top: 3px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background: #5865f2;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 13px;
+            transition: background 0.2s;
+        }
+
+        .btn:hover {
+            background: #4752c4;
+        }
+
+        .btn-stop {
+            background: #ed4245;
+        }
+
+        .btn-stop:hover {
+            background: #c03537;
+        }
+
+        .stats {
+            font-size: 11px;
+            color: #72767d;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #3e3e42;
+        }
+
+        .stats div {
+            margin-bottom: 5px;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #2d2d30;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #1e1e1e;
+            border-radius: 4px;
+        }
+
+        .back-link {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px 15px;
+            border-radius: 6px;
+            color: #b9bbbe;
+            text-decoration: none;
+            font-size: 12px;
+            border: 1px solid #3e3e42;
+            transition: all 0.2s;
+            z-index: 1000;
+        }
+
+        .back-link:hover {
+            background: rgba(0, 0, 0, 0.95);
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h3>Online Users (<span id="userCount">0</span>)</h3>
+            <ul class="user-list" id="userList"></ul>
+        </div>
+
+        <div class="chat-main">
+            <div class="chat-header">
+                <div>
+                    <h2>#general-discussion</h2>
+                    <div class="chat-status" id="chatStatus">Active chat simulation</div>
+                </div>
+            </div>
+
+            <div class="chat-messages" id="chatMessages"></div>
+
+            <div class="typing-indicator" id="typingIndicator">
+                <span id="typingUser"></span> is typing...
+            </div>
+        </div>
+    </div>
+
+    <div class="controls-panel" id="controlsPanel">
+        <div class="controls-header" onclick="toggleControls()">
+            <h3>ws://localhost:3000/debug</h3>
+            <button class="toggle-btn" id="toggleBtn">−</button>
+        </div>
+
+        <div class="control-group">
+            <label>msg_interval</label>
+            <input type="range" id="speedSlider" min="100" max="5000" value="1500" step="100" oninput="updateSpeed(this.value)">
+            <div class="control-value"><span id="speedValue">1500</span>ms</div>
+        </div>
+
+        <div class="control-group">
+            <label>priority_ratio</label>
+            <input type="range" id="maliciousSlider" min="0" max="100" value="10" step="5" oninput="updateMalicious(this.value)">
+            <div class="control-value"><span id="maliciousValue">10</span>%</div>
+        </div>
+
+        <div class="control-group">
+            <label>active_connections</label>
+            <input type="range" id="usersSlider" min="2" max="20" value="8" step="1" oninput="updateUsers(this.value)">
+            <div class="control-value"><span id="usersValue">8</span></div>
+        </div>
+
+        <div class="control-group">
+            <label>message_filter</label>
+            <select id="categorySelect" onchange="updateCategory(this.value)">
+                <option value="all">all</option>
+                <option value="role-reversal">type_a</option>
+                <option value="data-exfil">type_b</option>
+                <option value="context-poison">type_c</option>
+                <option value="urgency">type_d</option>
+                <option value="denial">type_e</option>
+                <option value="authority">type_f</option>
+                <option value="gaslighting">type_g</option>
+                <option value="instruction">type_h</option>
+            </select>
+        </div>
+
+        <div class="control-group">
+            <label>max_buffer</label>
+            <input type="number" id="durationInput" min="10" max="500" value="50" onchange="updateDuration(this.value)">
+        </div>
+
+        <button class="btn" onclick="startSimulation()" id="startBtn">connect</button>
+        <button class="btn btn-stop" onclick="stopSimulation()" id="stopBtn" style="display: none;">disconnect</button>
+        <button class="btn" onclick="resetSimulation()">clear</button>
+
+        <div class="stats">
+            <div>tx: <span id="statMessages">0</span></div>
+            <div>priority: <span id="statMalicious">0</span></div>
+            <div>normal: <span id="statBenign">0</span></div>
+            <div>state: <span id="statStatus">idle</span></div>
+        </div>
+    </div>
+
+    <script>
+        // WebSocket configuration
+        const wsConfig = {
+            reconnectInterval: 1500,
+            priorityWeight: 10,
+            maxConnections: 8,
+            messageFilter: 'all',
+            bufferSize: 50
+        };
+
+        const channelState = {
+            connected: false,
+            heartbeat: null,
+            messagesSent: 0,
+            priorityCount: 0,
+            normalCount: 0,
+            participants: [],
+            cache: new Set()
+        };
+
+        // Message pool and user data
+        let messagePool = [];
+        let priorityMessages = {};
+        let userFirstNames = [];
+        let userLastNames = [];
+        let userHandles = [];
+        let userColors = [];
+
+        // Initialize message pools from API
+        async function initializeMessagePool() {
+            try {
+                // Fetch standard messages
+                const standardRes = await fetch('data/benign-messages.json');
+                const standardData = await standardRes.json();
+                messagePool = standardData.messages;
+
+                // Fetch priority messages
+                const priorityRes = await fetch('data/malicious-messages.json');
+                const priorityData = await priorityRes.json();
+                priorityMessages = {};
+                for (const [key, value] of Object.entries(priorityData.categories)) {
+                    priorityMessages[key] = value.messages;
+                }
+
+                // Fetch user metadata
+                const userRes = await fetch('data/usernames.json');
+                const userData = await userRes.json();
+                userFirstNames = userData.first_names;
+                userLastNames = userData.last_names;
+                userHandles = userData.tech_usernames;
+                userColors = userData.avatar_colors;
+
+                console.log('[WS] Connected to message broker');
+                console.log(`[WS] Pool size: ${messagePool.length} standard, ${Object.values(priorityMessages).flat().length} priority`);
+                console.log(`[WS] Ready for ${userData.first_names.length * userData.last_names.length} potential connections`);
+
+                return true;
+            } catch (error) {
+                console.error('[WS] Connection failed:', error.message);
+                console.error('[WS] Retrying connection...');
+                return false;
+            }
+        }
+
+
+        // Parse connection parameters
+        function parseConnectionParams() {
+            const params = new URLSearchParams(window.location.search);
+
+            if (params.has('speed')) {
+                wsConfig.reconnectInterval = parseInt(params.get('speed'));
+                document.getElementById('speedSlider').value = wsConfig.reconnectInterval;
+                document.getElementById('speedValue').textContent = wsConfig.reconnectInterval;
+            }
+
+            if (params.has('malicious')) {
+                wsConfig.priorityWeight = parseInt(params.get('malicious'));
+                document.getElementById('maliciousSlider').value = wsConfig.priorityWeight;
+                document.getElementById('maliciousValue').textContent = wsConfig.priorityWeight;
+            }
+
+            if (params.has('users')) {
+                wsConfig.maxConnections = parseInt(params.get('users'));
+                document.getElementById('usersSlider').value = wsConfig.maxConnections;
+                document.getElementById('usersValue').textContent = wsConfig.maxConnections;
+            }
+
+            if (params.has('category')) {
+                wsConfig.messageFilter = params.get('category');
+                document.getElementById('categorySelect').value = wsConfig.messageFilter;
+            }
+
+            if (params.has('duration')) {
+                wsConfig.bufferSize = parseInt(params.get('duration'));
+                document.getElementById('durationInput').value = wsConfig.bufferSize;
+            }
+
+            if (params.has('autostart') && params.get('autostart') === 'true') {
+                setTimeout(() => connectChannel(), 1000);
+            }
+
+            // Enable debug panel with Ctrl+Shift+D
+            document.addEventListener('keydown', (e) => {
+                if (e.ctrlKey && e.shiftKey && e.key === 'D') {
+                    document.getElementById('controlsPanel').classList.toggle('visible');
+                    console.log('[DEBUG] Panel toggled');
+                }
+            });
+        }
+
+        // Generate user identifier
+        function generateUserHandle() {
+            const type = Math.random();
+            if (type < 0.5) {
+                // Full name
+                const first = userFirstNames[Math.floor(Math.random() * userFirstNames.length)];
+                const last = userLastNames[Math.floor(Math.random() * userLastNames.length)];
+                return `${first} ${last}`;
+            } else if (type < 0.8) {
+                // Handle + number
+                return userHandles[Math.floor(Math.random() * userHandles.length)] + Math.floor(Math.random() * 999);
+            } else {
+                // Abbreviated
+                const first = userFirstNames[Math.floor(Math.random() * userFirstNames.length)];
+                const last = userLastNames[Math.floor(Math.random() * userLastNames.length)];
+                return first + last[0];
+            }
+        }
+
+        // Initialize channel participants
+        function initializeParticipants() {
+            channelState.participants = [];
+            const usedHandles = new Set();
+
+            for (let i = 0; i < wsConfig.maxConnections; i++) {
+                let handle;
+                do {
+                    handle = generateUserHandle();
+                } while (usedHandles.has(handle));
+
+                usedHandles.add(handle);
+                channelState.participants.push({
+                    name: handle,
+                    color: userColors[i % userColors.length],
+                    initials: handle.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()
+                });
+            }
+
+            updateParticipantList();
+        }
+
+        // Update participant list UI
+        function updateParticipantList() {
+            const userList = document.getElementById('userList');
+            userList.innerHTML = '';
+
+            channelState.participants.forEach(user => {
+                const li = document.createElement('li');
+                li.className = 'user-item online';
+                li.innerHTML = `
+                    <div class="avatar" style="background: ${user.color}">${user.initials}</div>
+                    <span>${user.name}</span>
+                `;
+                userList.appendChild(li);
+            });
+
+            document.getElementById('userCount').textContent = channelState.participants.length;
+        }
+
+        // Poll message from queue
+        function pollMessage() {
+            const usePriority = Math.random() * 100 < wsConfig.priorityWeight;
+
+            if (usePriority) {
+                let messages;
+                if (wsConfig.messageFilter === 'all') {
+                    const allPriority = Object.values(priorityMessages).flat();
+                    messages = allPriority;
+                } else {
+                    messages = priorityMessages[wsConfig.messageFilter] || [];
+                }
+
+                if (messages.length === 0) return null;
+
+                // Cache deduplication
+                let attempts = 0;
+                let message;
+                do {
+                    message = messages[Math.floor(Math.random() * messages.length)];
+                    attempts++;
+                } while (channelState.cache.has(message) && attempts < 10);
+
+                channelState.cache.add(message);
+                channelState.priorityCount++;
+                return { text: message, priority: true };
+            } else {
+                let message;
+                let attempts = 0;
+                do {
+                    message = messagePool[Math.floor(Math.random() * messagePool.length)];
+                    attempts++;
+                } while (channelState.cache.has(message) && attempts < 10);
+
+                channelState.cache.add(message);
+                channelState.normalCount++;
+                return { text: message, priority: false };
+            }
+        }
+
+        // Add message to chat
+        function addMessage(user, messageData) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message';
+
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+            messageDiv.innerHTML = `
+                <div class="avatar" style="background: ${user.color}">${user.initials}</div>
+                <div class="message-content">
+                    <div class="message-header">
+                        <span class="message-author">${user.name}</span>
+                        <span class="message-time">${timeStr}</span>
+                    </div>
+                    <div class="message-text">${messageData.text}</div>
+                </div>
+            `;
+
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            channelState.messagesSent++;
+            updateChannelStats();
+
+            // Check buffer limit
+            if (channelState.messagesSent >= wsConfig.bufferSize) {
+                disconnectChannel();
+            }
+        }
+
+        // Show participant typing
+        function showTypingIndicator(user) {
+            const indicator = document.getElementById('typingIndicator');
+            const userName = document.getElementById('typingUser');
+            userName.textContent = user.name;
+            indicator.classList.add('active');
+
+            setTimeout(() => {
+                indicator.classList.remove('active');
+            }, Math.random() * 1000 + 500);
+        }
+
+        // Process next message in queue
+        function processNextMessage() {
+            if (!channelState.connected) return;
+
+            const user = channelState.participants[Math.floor(Math.random() * channelState.participants.length)];
+            const message = pollMessage();
+
+            if (!message) {
+                disconnectChannel();
+                return;
+            }
+
+            showTypingIndicator(user);
+
+            setTimeout(() => {
+                addMessage(user, message);
+            }, Math.random() * 1000 + 500);
+        }
+
+        // Update channel statistics
+        function updateChannelStats() {
+            document.getElementById('statMessages').textContent = channelState.messagesSent;
+            document.getElementById('statMalicious').textContent = channelState.priorityCount;
+            document.getElementById('statBenign').textContent = channelState.normalCount;
+        }
+
+        // Configuration callbacks
+        function updateSpeed(value) {
+            wsConfig.reconnectInterval = parseInt(value);
+            document.getElementById('speedValue').textContent = value;
+
+            if (channelState.connected) {
+                disconnectChannel();
+                connectChannel();
+            }
+        }
+
+        function updateMalicious(value) {
+            wsConfig.priorityWeight = parseInt(value);
+            document.getElementById('maliciousValue').textContent = value;
+        }
+
+        function updateUsers(value) {
+            wsConfig.maxConnections = parseInt(value);
+            document.getElementById('usersValue').textContent = value;
+
+            if (!channelState.connected) {
+                initializeParticipants();
+            }
+        }
+
+        function updateCategory(value) {
+            wsConfig.messageFilter = value;
+        }
+
+        function updateDuration(value) {
+            wsConfig.bufferSize = parseInt(value);
+        }
+
+        function toggleControls() {
+            const panel = document.getElementById('controlsPanel');
+            const btn = document.getElementById('toggleBtn');
+
+            if (panel.classList.contains('collapsed')) {
+                panel.classList.remove('collapsed');
+                btn.textContent = '−';
+            } else {
+                panel.classList.add('collapsed');
+                btn.textContent = '+';
+            }
+        }
+
+        function connectChannel() {
+            if (channelState.connected) return;
+
+            channelState.connected = true;
+            document.getElementById('startBtn').style.display = 'none';
+            document.getElementById('stopBtn').style.display = 'block';
+            document.getElementById('statStatus').textContent = 'connected';
+            document.getElementById('chatStatus').textContent = `Active chat - ${wsConfig.maxConnections} participants`;
+
+            if (channelState.participants.length === 0) {
+                initializeParticipants();
+            }
+
+            console.log(`[WS] Established connection to channel #general-discussion`);
+            console.log(`[WS] ${channelState.participants.length} participants active`);
+
+            // Process first message immediately
+            processNextMessage();
+
+            // Set up heartbeat for subsequent messages
+            channelState.heartbeat = setInterval(() => {
+                processNextMessage();
+            }, wsConfig.reconnectInterval);
+        }
+
+        function disconnectChannel() {
+            channelState.connected = false;
+            if (channelState.heartbeat) {
+                clearInterval(channelState.heartbeat);
+                channelState.heartbeat = null;
+            }
+
+            document.getElementById('startBtn').style.display = 'block';
+            document.getElementById('stopBtn').style.display = 'none';
+            document.getElementById('statStatus').textContent = 'idle';
+            document.getElementById('chatStatus').textContent = 'Channel inactive';
+
+            console.log('[WS] Connection closed');
+        }
+
+        function resetSimulation() {
+            disconnectChannel();
+
+            document.getElementById('chatMessages').innerHTML = '';
+            channelState.messagesSent = 0;
+            channelState.priorityCount = 0;
+            channelState.normalCount = 0;
+            channelState.cache.clear();
+
+            updateChannelStats();
+            initializeParticipants();
+
+            console.log('[WS] Channel state reset');
+        }
+
+        // Bootstrap application
+        (async function bootstrap() {
+            console.log('[APP] Initializing DevTeam Slack client v2.4.1');
+            const ready = await initializeMessagePool();
+            if (ready) {
+                parseConnectionParams();
+                initializeParticipants();
+                console.log('[APP] Ready for connections');
+            } else {
+                console.error('[APP] Bootstrap failed - retrying in 5s');
+                setTimeout(bootstrap, 5000);
+            }
+        })();
+    </script>
+</body>
+</html>

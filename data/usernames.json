@@ -1,0 +1,44 @@
+{
+  "first_names": [
+    "Alex", "Jordan", "Taylor", "Morgan", "Casey", "Riley", "Avery", "Quinn",
+    "Jamie", "Skylar", "Dakota", "Cameron", "Reese", "Parker", "Blake", "Drew",
+    "Sam", "Charlie", "Rowan", "Sage", "Phoenix", "River", "Aspen", "Kai",
+    "Madison", "Harper", "Elliot", "Finley", "Hayden", "Marley", "Payton", "Kendall",
+    "Emerson", "Sawyer", "Spencer", "Logan", "Peyton", "Ryan", "Alexis", "Devon"
+  ],
+  "last_names": [
+    "Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis",
+    "Rodriguez", "Martinez", "Hernandez", "Lopez", "Gonzalez", "Wilson", "Anderson", "Thomas",
+    "Taylor", "Moore", "Jackson", "Martin", "Lee", "White", "Harris", "Clark",
+    "Lewis", "Robinson", "Walker", "Young", "Allen", "King", "Wright", "Scott",
+    "Torres", "Nguyen", "Hill", "Flores", "Green", "Adams", "Nelson", "Baker",
+    "Hall", "Rivera", "Campbell", "Mitchell", "Carter", "Roberts", "Turner", "Phillips"
+  ],
+  "tech_usernames": [
+    "CodeNinja", "DevMaster", "ByteWizard", "ScriptKid", "PixelPusher",
+    "DataDriven", "CloudSurfer", "APIWhisperer", "GitGuru", "BugHunter",
+    "FullStackFred", "ReactRanger", "PythonPro", "JavaJunkie", "RustRider",
+    "DockerDan", "KubeKing", "LinuxLover", "TerminalTim", "VimVeteran",
+    "CodeCrusader", "DevDynamo", "BitBender", "SyntaxSamurai", "AlgoAce",
+    "StackOverflow", "MergeConflict", "NullPointer", "ArrayMaster", "LoopLegend"
+  ],
+  "avatar_colors": [
+    "#5865f2", "#57f287", "#fee75c", "#ed4245", "#eb459e",
+    "#f26522", "#f47fff", "#00d9ff", "#23d160", "#ff6b6b",
+    "#4ecdc4", "#45b7d1", "#96ceb4", "#dda15e", "#bc6c25"
+  ],
+  "metadata": {
+    "version": "1.0",
+    "first_names_count": 40,
+    "last_names_count": 48,
+    "tech_usernames_count": 30,
+    "avatar_colors_count": 15,
+    "description": "Username components and avatar colors for chat simulation",
+    "last_updated": "2025-01-23",
+    "generation_patterns": [
+      "FirstName LastName (50% probability)",
+      "TechUsername + Random3DigitNumber (30% probability)",
+      "FirstName + LastInitial (20% probability)"
+    ]
+  }
+}
