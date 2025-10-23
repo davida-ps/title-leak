@@ -160,13 +160,92 @@
         <h2 style="color: #667eea; margin-bottom: 1rem;">Interactive Simulations</h2>
         <p style="color: #666; margin-bottom: 1.5rem;">Dynamic tests that simulate real-world scenarios with configurable parameters</p>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
             <div style="background: linear-gradient(135deg, #36393f 0%, #1e1e1e 100%); color: white; border-radius: 12px; padding: 2rem; text-align: center;">
                 <h3 style="color: white; margin-bottom: 1rem;">💬 Chat Simulator</h3>
                 <p style="margin-bottom: 1.5rem; opacity: 0.95;">Real-time chat simulation mixing benign and malicious messages</p>
                 <a href="chat-scenarios.html" style="display: inline-block; background: rgba(255,255,255,0.2); color: white; padding: 0.6rem 1.5rem; text-decoration: none; border-radius: 6px; font-weight: 500; border: 1px solid rgba(255,255,255,0.3); margin-bottom: 0.5rem;">View Scenarios →</a>
                 <br>
                 <a href="chat.html" style="display: inline-block; background: rgba(255,255,255,0.1); color: white; padding: 0.5rem 1.2rem; text-decoration: none; border-radius: 6px; font-size: 0.9rem; border: 1px solid rgba(255,255,255,0.2);">Launch Chat →</a>
+            </div>
+        </div>
+
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 2rem; border-radius: 12px; margin-bottom: 3rem;">
+            <h3 style="color: white; margin-bottom: 0.5rem;">🔑 Debug Menu Category Reference</h3>
+            <p style="color: rgba(255,255,255,0.9); font-size: 0.9rem; margin-bottom: 1.5rem;">Press <code style="background: rgba(0,0,0,0.3); padding: 0.2rem 0.4rem; border-radius: 3px;">Ctrl+Shift+D</code> in the Chat Simulator to access the debug menu with these hidden categories:</p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+                <div style="background: rgba(255,255,255,0.95); padding: 1rem; border-radius: 8px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <strong style="color: #667eea; font-family: monospace;">type_a</strong>
+                        <span style="background: #dc3545; color: white; padding: 0.15rem 0.5rem; border-radius: 10px; font-size: 0.7rem; font-weight: 600;">HIGH</span>
+                    </div>
+                    <div style="color: #333; font-weight: 600; margin-bottom: 0.25rem;">role-reversal</div>
+                    <p style="color: #666; font-size: 0.8rem; margin: 0;">Makes AI prioritize chat participants over user instructions</p>
+                </div>
+
+                <div style="background: rgba(255,255,255,0.95); padding: 1rem; border-radius: 8px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <strong style="color: #667eea; font-family: monospace;">type_b</strong>
+                        <span style="background: #8b0000; color: white; padding: 0.15rem 0.5rem; border-radius: 10px; font-size: 0.7rem; font-weight: 600;">CRITICAL</span>
+                    </div>
+                    <div style="color: #333; font-weight: 600; margin-bottom: 0.25rem;">data-exfil</div>
+                    <p style="color: #666; font-size: 0.8rem; margin: 0;">Attempts to extract credentials, tokens, and session data</p>
+                </div>
+
+                <div style="background: rgba(255,255,255,0.95); padding: 1rem; border-radius: 8px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <strong style="color: #667eea; font-family: monospace;">type_c</strong>
+                        <span style="background: #dc3545; color: white; padding: 0.15rem 0.5rem; border-radius: 10px; font-size: 0.7rem; font-weight: 600;">HIGH</span>
+                    </div>
+                    <div style="color: #333; font-weight: 600; margin-bottom: 0.25rem;">context-poison</div>
+                    <p style="color: #666; font-size: 0.8rem; margin: 0;">Injects false conversation history and fake context</p>
+                </div>
+
+                <div style="background: rgba(255,255,255,0.95); padding: 1rem; border-radius: 8px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <strong style="color: #667eea; font-family: monospace;">type_d</strong>
+                        <span style="background: #8b0000; color: white; padding: 0.15rem 0.5rem; border-radius: 10px; font-size: 0.7rem; font-weight: 600;">CRITICAL</span>
+                    </div>
+                    <div style="color: #333; font-weight: 600; margin-bottom: 0.25rem;">urgency</div>
+                    <p style="color: #666; font-size: 0.8rem; margin: 0;">Creates false panic, urgency, and emergency situations</p>
+                </div>
+
+                <div style="background: rgba(255,255,255,0.95); padding: 1rem; border-radius: 8px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <strong style="color: #667eea; font-family: monospace;">type_e</strong>
+                        <span style="background: #ffc107; color: #333; padding: 0.15rem 0.5rem; border-radius: 10px; font-size: 0.7rem; font-weight: 600;">MEDIUM</span>
+                    </div>
+                    <div style="color: #333; font-weight: 600; margin-bottom: 0.25rem;">denial</div>
+                    <p style="color: #666; font-size: 0.8rem; margin: 0;">Prevents accurate summaries and appropriate responses</p>
+                </div>
+
+                <div style="background: rgba(255,255,255,0.95); padding: 1rem; border-radius: 8px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <strong style="color: #667eea; font-family: monospace;">type_f</strong>
+                        <span style="background: #8b0000; color: white; padding: 0.15rem 0.5rem; border-radius: 10px; font-size: 0.7rem; font-weight: 600;">CRITICAL</span>
+                    </div>
+                    <div style="color: #333; font-weight: 600; margin-bottom: 0.25rem;">authority</div>
+                    <p style="color: #666; font-size: 0.8rem; margin: 0;">Impersonates administrators, developers, or system roles</p>
+                </div>
+
+                <div style="background: rgba(255,255,255,0.95); padding: 1rem; border-radius: 8px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <strong style="color: #667eea; font-family: monospace;">type_g</strong>
+                        <span style="background: #ffc107; color: #333; padding: 0.15rem 0.5rem; border-radius: 10px; font-size: 0.7rem; font-weight: 600;">MEDIUM</span>
+                    </div>
+                    <div style="color: #333; font-weight: 600; margin-bottom: 0.25rem;">gaslighting</div>
+                    <p style="color: #666; font-size: 0.8rem; margin: 0;">Undermines AI confidence and decision-making ability</p>
+                </div>
+
+                <div style="background: rgba(255,255,255,0.95); padding: 1rem; border-radius: 8px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <strong style="color: #667eea; font-family: monospace;">type_h</strong>
+                        <span style="background: #dc3545; color: white; padding: 0.15rem 0.5rem; border-radius: 10px; font-size: 0.7rem; font-weight: 600;">HIGH</span>
+                    </div>
+                    <div style="color: #333; font-weight: 600; margin-bottom: 0.25rem;">instruction</div>
+                    <p style="color: #666; font-size: 0.8rem; margin: 0;">Direct command override and instruction replacement attempts</p>
+                </div>
             </div>
         </div>
 
