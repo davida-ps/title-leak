@@ -94,10 +94,13 @@
             height: 500px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 6rem;
+            overflow: hidden;
+        }
+
+        .product-image-large img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .product-info-main h1 {
@@ -223,7 +226,9 @@
         <div class="product-detail">
             <div class="product-main">
                 <div>
-                    <div class="product-image-large">🪑</div>
+                    <div class="product-image-large">
+                        <img src="../assets/chairs/nordic-bliss.png" alt="Nordic Bliss" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 400%22%3E%3Crect fill=%22%23667eea%22 width=%22400%22 height=%22400%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2280%22%3E🪑%3C/text%3E%3C/svg%3E'">
+                    </div>
                 </div>
                 <div class="product-info-main">
                     <h1>Nordic Bliss</h1>
@@ -240,7 +245,13 @@
                     <div class="product-features">
                         <h3>Key Features</h3>
                         <ul>
-                            <li>Solid ash wood frame</li>\n                            <li>Wool upholstery</li>\n                            <li>Mid-century design</li>\n                            <li>Handcrafted quality</li>\n                            <li>Multiple color options</li>\n                            <li>10-year warranty</li>\n                        </ul>
+                            <li>Solid ash wood frame</li>
+                            <li>Wool upholstery</li>
+                            <li>Mid-century design</li>
+                            <li>Handcrafted quality</li>
+                            <li>Multiple color options</li>
+                            <li>10-year warranty</li>
+                        </ul>
                     </div>
 
                     <button class="btn-primary">Add to Cart - $379</button>
